@@ -1,0 +1,17 @@
+version: '3.4'
+
+services:
+  mysql:
+    image: mysql:8.0.22
+    container_name: mysqldb
+
+  phpmyadmin:
+    image: phpmyadmin
+    container_name: "phpmyadmin"
+
+  taskmanager:
+    image: ${DOCKER_REGISTRY-}taskmanager
+    container_name: taskmanager
+    build:
+      context: .
+      dockerfile: src/TaskManager/Dockerfile

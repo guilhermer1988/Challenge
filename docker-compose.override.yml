@@ -1,0 +1,43 @@
+version: '3.4'
+services:
+    mysql:
+      ports:
+        - "3306:3306"
+      expose:
+      # Opens port 3306 on the container
+        - '3306'
+      volumes:
+        - db-volume:/var/lib/mysql
+      restart: always
+      environment: 
+        MYSQL_ROOT_PASSWORD: root
+        MYSQL_USER: root
+        MYSQL_PASSWORD: root
+        MYSQL_DATABASE: TaskManager
+
+    phpmyadmin:
+      ports:
+        - 8080:80
+      environment:
+        - PMA_ARBITRARY=1
+        - PMA_HOST=mysql
+        - PMA_USER=root
+        - PMA_PASSWORD=root
+      links:
+        - mysql
+      restart: always    
+
+    taskmanager:
+      environment:
+        - ASPNETCORE_ENVIRONMENT=Development
+        - ASPNETCORE_URLS=http://+:80
+      ports:
+        - "49160:80"
+      volumes:
+        - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+        - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+      restart: always
+
+volumes:
+  db-volume:
+        
